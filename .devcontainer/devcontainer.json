@@ -1,0 +1,51 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "Daytona Go Development",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "."
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": true,
+			"configureZshAsDefaultShell": true,
+			"installOhMyZsh": true,
+			"installOhMyZshConfig": true,
+			"upgradePackages": false,
+			"username": "automatic", // We create the daytona user in the Dockerfile
+			"userUid": "automatic", // So let common-utils detect the user
+			"userGid": "automatic" // setting the user here will cause issues
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"installDockerBuildx": true,
+			"installDockerComposeSwitch": true,
+			"version": "latest",
+			"dockerDashComposeVersion": "latest"
+		},
+		"ghcr.io/devcontainers/features/go:1": {
+			"version": "1.22.2",
+			"golangciLintVersion": "1.57.1"
+		},
+		"ghcr.io/devcontainers/features/node:1": {
+			"nodeGypDependencies": true,
+			"version": "lts",
+			"nvmVersion": "latest"
+		},
+		"ghcr.io/devcontainers-contrib/features/devcontainers-cli:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-contrib/features/bash-command:1": {
+			// Setup the go-appinsight project and cache go modules
+			"command": "git clone https://github.com/niiwade/go-appinsight && cd go-appinsight && go mod tidy && cd .. && rm -rf go-appinsight && go install github.com/swaggo/swag/cmd/swag@v1.16.3 && chown -R daytona:golang /usr/local/go && chown -R daytona:golang /go"
+		}
+	},
+	"overrideFeatureInstallOrder": [
+		"ghcr.io/devcontainers/features/common-utils:2",
+		"ghcr.io/devcontainers/features/docker-in-docker:2",
+		"ghcr.io/devcontainers/features/go:1",
+		"ghcr.io/devcontainers/features/node:1",
+		"ghcr.io/devcontainers-contrib/features/devcontainers-cli:1",
+		"ghcr.io/devcontainers-contrib/features/bash-command:1"
+	]
+}
